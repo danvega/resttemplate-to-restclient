@@ -1,0 +1,58 @@
+package dev.danvega.tracker;
+
+import java.time.LocalDate;
+
+import dev.danvega.tracker.carrier.CarrierClient;
+import dev.danvega.tracker.carrier.Shipment;
+import dev.danvega.tracker.carrier.ShipmentNotFoundException;
+import dev.danvega.tracker.carrier.ShipmentStatus;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
+class ShipmentControllerTest {
+
+    @Autowired
+    TestRestTemplate restTemplate;
+
+    @MockitoBean
+    CarrierClient carrierClient;
+
+    @Test
+    void findOneReturnsShipment() {
+        given(carrierClient.getShipment("1Z999AA10123456784")).willReturn(new Shipment(
+                "1Z999AA10123456784", ShipmentStatus.OUT_FOR_DELIVERY,
+                "Cleveland, OH", "Austin, TX", LocalDate.of(2026, 11, 21)));
+
+        ResponseEntity<Shipment> response =
+                restTemplate.getForEntity("/api/shipments/{id}", Shipment.class, "1Z999AA10123456784");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().status()).isEqualTo(ShipmentStatus.OUT_FOR_DELIVERY);
+    }
+
+    @Test
+    void findOneReturns404ForUnknownShipment() {
+        given(carrierClient.getShipment("NOPE")).willThrow(new ShipmentNotFoundException("NOPE"));
+
+        ResponseEntity<ProblemDetail> response =
+                restTemplate.getForEntity("/api/shipments/{id}", ProblemDetail.class, "NOPE");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().getDetail()).contains("NOPE");
+    }
+
+}
