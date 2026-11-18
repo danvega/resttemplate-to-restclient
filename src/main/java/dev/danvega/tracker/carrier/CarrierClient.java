@@ -3,30 +3,34 @@ package dev.danvega.tracker.carrier;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 @Component
 public class CarrierClient {
 
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
-    public CarrierClient(RestTemplate carrierRestTemplate) {
-        this.restTemplate = carrierRestTemplate;
+    public CarrierClient(RestClient carrierRestClient) {
+        this.restClient = carrierRestClient;
     }
 
     public Shipment getShipment(String trackingNumber) {
-        return restTemplate.getForObject("/shipments/{trackingNumber}", Shipment.class, trackingNumber);
+        return restClient.get()
+                .uri("/shipments/{trackingNumber}", trackingNumber)
+                .retrieve()
+                .onStatus(status -> status.isSameCodeAs(HttpStatus.NOT_FOUND), (request, response) -> {
+                    throw new ShipmentNotFoundException(trackingNumber);
+                })
+                .body(Shipment.class);
     }
 
     public List<Shipment> getShipments() {
-        return restTemplate.exchange(
-                "/shipments",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Shipment>>() {})
-                .getBody();
+        return restClient.get()
+                .uri("/shipments")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
     }
 
 }
