@@ -71,7 +71,17 @@ curl -i localhost:8080/api/shipments/NOPE
 | Branch | What it has |
 | --- | --- |
 | `start` | Spring Boot 4.1.3 with `RestTemplate`. Start here. |
+| `step-1-boot-4.2` | Spring Boot 4.2.0. Ten removal warnings, tests still pass. |
+| `step-2-restclient-bean` | A `RestClient` bean built with `baseUrl`. |
+| `step-3-timeouts-yaml` | The timeouts move to `spring.http.clients` in `application.yaml`. |
+| `step-4-customizer` | `RestClientCustomizer` with `defaultHeader` replaces the interceptor. |
+| `step-5-client-calls` | The calls use `RestClient`, with `onStatus` for the 404. |
+| `step-6-delete-error-handler` | `CarrierErrorHandler` is gone. |
+| `step-7-full-url-tests` | Full URLs in the `MockRestServiceServer` expectations. |
+| `step-8-rest-test-client` | `RestTestClient` replaces `TestRestTemplate`. Same code as `main`. |
 | `main` | Spring Boot 4.2.0 with `RestClient`. The finished code. |
+
+Each `step-` branch adds one change on top of the one before. To see a single change, compare a step with the branch before it. Some tests fail in steps 2 to 6 because the app is only half migrated there. Step 7 makes them pass again.
 
 ## Good to know
 
