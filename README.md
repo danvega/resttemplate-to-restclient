@@ -6,7 +6,7 @@ This is the `start` branch. It runs on Spring Boot 4.1 with `RestTemplate`, and 
 
 ## Tested with
 
-Java 25, Spring Boot 4.1.2.
+Java 25, Spring Boot 4.1.3.
 
 ## What you need
 
@@ -70,7 +70,7 @@ curl -i localhost:8080/api/shipments/NOPE
 
 | Branch | What it has |
 | --- | --- |
-| `start` | Spring Boot 4.1.2 with `RestTemplate`. Start here. |
+| `start` | Spring Boot 4.1.3 with `RestTemplate`. Start here. |
 | `main` | Spring Boot 4.2.0 with `RestClient`. The finished code. |
 
 ## Good to know
