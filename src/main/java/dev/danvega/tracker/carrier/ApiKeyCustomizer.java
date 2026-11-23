@@ -1,11 +1,11 @@
 package dev.danvega.tracker.carrier;
 
-import org.springframework.boot.restclient.RestTemplateCustomizer;
+import org.springframework.boot.restclient.RestClientCustomizer;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 @Component
-public class ApiKeyCustomizer implements RestTemplateCustomizer {
+public class ApiKeyCustomizer implements RestClientCustomizer {
 
     private final CarrierProperties properties;
 
@@ -14,11 +14,8 @@ public class ApiKeyCustomizer implements RestTemplateCustomizer {
     }
 
     @Override
-    public void customize(RestTemplate restTemplate) {
-        restTemplate.getInterceptors().add((request, body, execution) -> {
-            request.getHeaders().set("X-Api-Key", properties.apiKey());
-            return execution.execute(request, body);
-        });
+    public void customize(RestClient.Builder restClientBuilder) {
+        restClientBuilder.defaultHeader("X-Api-Key", properties.apiKey());
     }
 
 }
