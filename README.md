@@ -70,7 +70,7 @@ curl -i localhost:8080/api/shipments/NOPE
 
 | Branch | What it has |
 | --- | --- |
-| `start` | Spring Boot 4.1.2 with `RestTemplate`. Start here. Its README lists the migration steps. |
+| `start` | Spring Boot 4.1.3 with `RestTemplate`. Start here. Its README lists the migration steps. |
 | `main` | Spring Boot 4.2.0 with `RestClient`. The finished code. |
 
 ## Good to know
