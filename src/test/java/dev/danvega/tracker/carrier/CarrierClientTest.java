@@ -32,7 +32,7 @@ class CarrierClientTest {
 
     @Test
     void getShipmentReturnsShipment() {
-        server.expect(requestTo("/shipments/1Z999AA10123456784"))
+        server.expect(requestTo("https://carrier.example.com/v1/shipments/1Z999AA10123456784"))
                 .andExpect(header("X-Api-Key", "test-key"))
                 .andRespond(withSuccess("""
                         {
@@ -53,7 +53,7 @@ class CarrierClientTest {
 
     @Test
     void getShipmentsReturnsList() {
-        server.expect(requestTo("/shipments"))
+        server.expect(requestTo("https://carrier.example.com/v1/shipments"))
                 .andRespond(withSuccess("""
                         [
                           { "trackingNumber": "1Z999AA10123456784", "status": "IN_TRANSIT" },
@@ -69,7 +69,7 @@ class CarrierClientTest {
 
     @Test
     void unknownTrackingNumberThrowsShipmentNotFound() {
-        server.expect(requestTo("/shipments/NOPE"))
+        server.expect(requestTo("https://carrier.example.com/v1/shipments/NOPE"))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND));
 
         assertThatThrownBy(() -> carrierClient.getShipment("NOPE"))
