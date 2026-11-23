@@ -6,7 +6,7 @@ The `main` branch holds the finished code. To do the migration yourself, check o
 
 ## Tested with
 
-Java 25, Spring Boot 4.2.0-RC2.
+Java 25, Spring Boot 4.2.0.
 
 ## What you need
 
@@ -71,7 +71,7 @@ curl -i localhost:8080/api/shipments/NOPE
 | Branch | What it has |
 | --- | --- |
 | `start` | Spring Boot 4.1.2 with `RestTemplate`. Start here. Its README lists the migration steps. |
-| `main` | Spring Boot 4.2.0-RC2 with `RestClient`. The finished code. |
+| `main` | Spring Boot 4.2.0 with `RestClient`. The finished code. |
 
 ## Good to know
 
@@ -79,4 +79,3 @@ curl -i localhost:8080/api/shipments/NOPE
 - The `spring.http.clients.*` timeouts apply to every HTTP client Boot builds for you, not just this one.
 - `RestClientCustomizer` applies to every `RestClient.Builder` from the context, the same way `RestTemplateCustomizer` did. In a bigger app, set the API key on the carrier client only.
 - With `rootUri`, Boot's `MockRestServiceServer` matched relative paths like `/shipments`. With `baseUrl`, the test expectations need the full URL.
-- Spring Boot 4.2 is a release candidate here. Re-test on 4.2 GA.
