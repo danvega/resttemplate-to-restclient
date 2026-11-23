@@ -57,7 +57,7 @@ curl -i localhost:8080/api/shipments/NOPE
 
 ## The migration
 
-1. In `pom.xml`, change the Spring Boot version to `4.2.0-RC2`.
+1. In `pom.xml`, change the Spring Boot version to `4.2.0`.
 2. Run `./mvnw verify`. The tests still pass, but the compiler prints ten "deprecated and marked for removal" warnings.
 3. Swap the `RestTemplateBuilder` bean for `RestClient.Builder`. `rootUri` becomes `baseUrl`. The timeouts move to `spring.http.clients.connect-timeout` and `spring.http.clients.read-timeout`.
 4. Swap `RestTemplateCustomizer` for `RestClientCustomizer`. The interceptor becomes `defaultHeader`.
@@ -71,10 +71,9 @@ curl -i localhost:8080/api/shipments/NOPE
 | Branch | What it has |
 | --- | --- |
 | `start` | Spring Boot 4.1.2 with `RestTemplate`. Start here. |
-| `main` | Spring Boot 4.2.0-RC2 with `RestClient`. The finished code. |
+| `main` | Spring Boot 4.2.0 with `RestClient`. The finished code. |
 
 ## Good to know
 
 - `carrier-api` is a stand-in for a real carrier. It never changes during the migration. It expects the header `X-Api-Key: demo-key`.
 - With `rootUri`, Boot's `MockRestServiceServer` matches relative paths like `/shipments`. That trick only works for `RestTemplate`. After the move to `RestClient`, the test expectations need the full URL.
-- Spring Boot 4.2 is a release candidate here. Re-test on 4.2 GA.
